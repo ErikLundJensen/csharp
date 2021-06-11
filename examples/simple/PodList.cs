@@ -11,7 +11,7 @@ namespace simple
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Running in cluster");
+            // Console.WriteLine("Running in cluster");
             // var config = KubernetesClientConfiguration.InClusterConfig();
 
             var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
@@ -25,13 +25,13 @@ namespace simple
             var jobs = Yaml.LoadAllFromFileAsync("./config/job.tpl", typeMap);
             foreach (var job in jobs.Result)
             {
-                var createdJob = client.CreateNamespacedJob((V1Job)job, "ncos-job-executors-sbx");
+                var createdJob = client.CreateNamespacedJob((V1Job)job, args[1]);
                 Console.WriteLine("Created object:");
                 Console.WriteLine(createdJob.Metadata.Name);
             }
 
             Console.WriteLine("List jobs");
-            var list = client.ListNamespacedJob("job-executions-sbx");
+            var list = client.ListNamespacedJob(args[1]);
             foreach (var item in list.Items)
             {
                 Console.WriteLine(item.Metadata.Name);
